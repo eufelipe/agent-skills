@@ -1,0 +1,9 @@
+.git
+.gitignore
+.taskmaster/
+node_modules/
+.env
+.env.example
+docs/
+*.log
+.DS_Store

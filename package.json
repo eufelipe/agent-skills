@@ -1,20 +1,51 @@
 {
   "name": "@eufelipe/agent-skills",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "CLI para instalar skills padronizadas em ferramentas de agentes de IA",
+  "type": "module",
+  "main": "./bin/cli.js",
+  "bin": {
+    "eufelipe-agent-skills": "./bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
+    "cli": "node bin/cli.js",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "cli",
+    "agent",
+    "skills",
+    "cursor",
+    "claude-code",
+    "obsidian",
+    "mcp"
+  ],
+  "author": "eufelipe",
+  "license": "ISC",
+  "engines": {
+    "node": ">=18.0.0"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/eufelipe/agent-skills.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/eufelipe/agent-skills/issues"
   },
-  "homepage": "https://github.com/eufelipe/agent-skills#readme"
+  "homepage": "https://github.com/eufelipe/agent-skills#readme",
+  "dependencies": {
+    "chalk": "^5.6.2",
+    "commander": "^12.1.0",
+    "inquirer": "^9.3.8",
+    "mustache": "^4.2.0",
+    "node-fetch": "^3.3.2",
+    "ora": "^8.2.0",
+    "yaml": "^2.8.3"
+  }
 }
