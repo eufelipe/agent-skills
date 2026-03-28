@@ -1,20 +1,20 @@
 {
   "models": {
     "main": {
-      "provider": "anthropic",
-      "modelId": "claude-sonnet-4-5",
+      "provider": "claude-code",
+      "modelId": "sonnet",
       "maxTokens": 64000,
       "temperature": 0.2
     },
     "research": {
-      "provider": "claude-code",
-      "modelId": "sonnet",
-      "maxTokens": 64000,
+      "provider": "perplexity",
+      "modelId": "sonar",
+      "maxTokens": 8700,
       "temperature": 0.1
     },
     "fallback": {
-      "provider": "anthropic",
-      "modelId": "claude-sonnet-4-20250514",
+      "provider": "claude-code",
+      "modelId": "sonnet",
       "maxTokens": 64000,
       "temperature": 0.2
     }
@@ -25,13 +25,14 @@
     "defaultNumTasks": 10,
     "defaultSubtasks": 5,
     "defaultPriority": "medium",
-    "projectName": "Task Master",
+    "projectName": "@eufelipe/agent-skills",
     "ollamaBaseURL": "http://localhost:11434/api",
     "bedrockBaseURL": "https://bedrock.us-east-1.amazonaws.com",
     "responseLanguage": "Brazilian Portuguese",
     "enableCodebaseAnalysis": true,
     "enableProxy": false,
-    "anonymousTelemetry": true
+    "anonymousTelemetry": true,
+    "userId": "1234567890"
   },
   "claudeCode": {},
   "codexCli": {},
