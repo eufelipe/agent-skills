@@ -1,12 +1,11 @@
 {
-  "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "task-master-ai"
-  ],
   "permissions": {
     "allow": [
       "Bash(task-master list:*)",
-      "Bash(npx -y task-master-ai list)"
+      "Bash(npx -y task-master-ai list)",
+      "mcp__task-master-ai__get_tasks"
     ]
-  }
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": ["task-master-ai"]
 }
