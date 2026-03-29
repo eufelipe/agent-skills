@@ -26,3 +26,10 @@ Concluir subtarefas 2.2 a 2.5 após 2.1 (dependências) já atendida: entry poin
 - `bin/cli.js` (novo)
 
 **Commit:** `b6f444c` (hash local; reescreva se fizer amend com assinatura)
+
+---
+
+### Atualização — testes de integração do CLI
+
+- Adicionado `tests/integration/cli.test.js`: `spawnSync` do Node executa `bin/cli.js` com `NO_COLOR=1`, cobre `--help`, `--version` e comandos stub (`install`, `list`, `info`, `doctor`).
+- `npm run validate` passa com 8 testes no total.
