@@ -1,0 +1,6 @@
+name: second-brain
+description: Organização de notas e vault no estilo segundo cérebro
+version: '1.0.0'
+targets:
+  - cursor
+  - obsidian
