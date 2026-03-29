@@ -1,6 +1,21 @@
 name: second-brain
-description: Organização de notas e vault no estilo segundo cérebro
-version: '1.0.0'
+description: Instruções para agentes escreverem no vault Obsidian
+version: 1.0.0
+author: eufelipe
+
 targets:
   - cursor
-  - obsidian
+  - claude-code
+
+config:
+  vault_path:
+    type: string
+    required: true
+    prompt: "Qual o caminho do seu vault Obsidian?"
+    validate: "existsAndIsObsidianVault"
+
+files:
+  - template: template.md
+    target_cursor: .cursor/rules/second-brain.mdc
+    target_claude: CLAUDE.md
+    mode: append

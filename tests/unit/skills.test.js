@@ -41,7 +41,7 @@ describe('skills', () => {
     expect(second).toBeDefined();
     expect(second.description).toBeTruthy();
     expect(second.version).toBe('1.0.0');
-    expect(second.targets).toEqual(['cursor', 'obsidian']);
+    expect(second.targets).toEqual(['cursor', 'claude-code']);
   });
 
   it('getSkill carrega second-brain e getSkill inexistente retorna null', () => {
@@ -54,10 +54,31 @@ describe('skills', () => {
   it('getSkillTemplate retorna conteúdo e lança se template ausente', () => {
     const body = getSkillTemplate('second-brain');
     expect(typeof body).toBe('string');
-    expect(body).toContain('Second brain');
+    expect(body).toContain('Second Brain — Instruções para Agentes');
+    expect(body).toContain('{{vault_path}}');
+    expect(body).toContain('{{agent}}');
+    expect(body).toContain('{{date}}');
     expect(() => getSkillTemplate('skill-inexistente')).toThrow(
       "Template não encontrado para skill 'skill-inexistente'"
     );
+  });
+
+  it('second-brain skill.yaml segue metadata e files do PRD', () => {
+    const skill = getSkill('second-brain');
+    expect(skill).not.toBeNull();
+    expect(skill.name).toBe('second-brain');
+    expect(skill.author).toBe('eufelipe');
+    expect(skill.config?.vault_path).toMatchObject({
+      type: 'string',
+      required: true,
+      validate: 'existsAndIsObsidianVault',
+    });
+    expect(skill.files?.[0]).toMatchObject({
+      template: 'template.md',
+      target_cursor: '.cursor/rules/second-brain.mdc',
+      target_claude: 'CLAUDE.md',
+      mode: 'append',
+    });
   });
 
   it('validateSkill aceita objeto completo e rejeita campos faltando', () => {

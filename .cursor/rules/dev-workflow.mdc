@@ -24,8 +24,8 @@ alwaysApply: true
   - Se o `qa` falhar, corrija os problemas existentes antes de prosseguir
 
 - **Entenda o escopo do trabalho**
-  - Se for baseado em uma tarefa Task Master: use o MCP para obter detalhes completos via `get_task`
-  - Marque imediatamente como `in-progress` via `set_task_status` antes de escrever qualquer linha
+  - Se for baseado em uma tarefa Task Master: use o MCP para obter detalhes completos via `get_task` ou `next_task`
+  - **Antes de qualquer linha de código:** (1) `set_task_status` → `in-progress` na **tarefa pai** e na **primeira subtarefa** ativa; (2) `update_subtask` na **primeira subtarefa** com nota datada: escopo, arquivos previstos e plano curto — isso registra o início do trabalho (o status em si é só via `set_task_status`, não via `update_subtask`)
   - Se não houver tarefa definida: peça esclarecimentos antes de codificar
   - Identifique arquivos afetados e dependências antes de escrever qualquer linha
 
@@ -43,6 +43,7 @@ alwaysApply: true
   [ ] Criar função X
   [ ] Escrever testes
   [ ] Executar QA
+  [ ] Dev log em `dev-logs/` (se gatilhos da §6 se aplicam)
   [ ] Commit
 
   ❌ DON'T: Começar a implementar sem planejamento
@@ -69,12 +70,13 @@ alwaysApply: true
 
   ```
   ✅ Ciclo por subtarefa:
-  1. set_task_status → in-progress
-  2. Implementar
-  3. Escrever/rodar testes
-  4. update_subtask → log do que foi feito
-  5. set_task_status → done
-  6. Próxima subtarefa
+  1. set_task_status → in-progress (subtarefa atual)
+  2. update_subtask → plano ou checkpoint ao iniciar a subtarefa (quando for a primeira do bloco, alinhar com o passo “Antes de Começar”)
+  3. Implementar
+  4. Escrever/rodar testes
+  5. update_subtask → log do que foi feito
+  6. set_task_status → done
+  7. Próxima subtarefa
   ```
 
 - **Escreva testes junto com o código, não depois**
@@ -114,7 +116,14 @@ alwaysApply: true
 
 ### 6. Log de Desenvolvimento
 
-- **Crie um log em `dev-logs/` após concluir o desenvolvimento**
+- **Gatilhos — criar `dev-logs/` quando qualquer item abaixo for verdadeiro** (se mais de um, um único arquivo pode cobrir o lote do dia):
+  - Tarefa Task Master marcada como `done` (pai ou conjunto de subtarefas que fecha uma entrega)
+  - Mudança em código de produção (`src/`, `bin/`), contrato público da CLI, ou testes novos/alterados com intenção de commit
+  - Decisão arquitetural, refactor multi-arquivo ou mudança de comportamento observável pelo usuário
+- **Não precisa** de arquivo novo: pergunta respondida sem alteração no repo; ajuste mínimo de typo/comentário sem impacto de comportamento; exploração que não alterou arquivos (nesse caso, opcional anotar só no chat ou no Task Master)
+- **Checkpoint antes da mensagem final ao usuário:** se houve alteração versionável relevante ou fechamento de tarefa TM, o turno **não termina** sem `dev-logs/YYYY-MM-DD-<slug>.md` criado/atualizado e um resumo do log no chat. ❌ Não declare “concluído” / “pronto” sem cumprir isso quando um gatilho acima vale.
+- **Obrigatório quando aplicável:** omitir o arquivo apesar do gatilho é violação do fluxo.
+- **Crie o arquivo em `dev-logs/`** após `npm run qa` passar e antes do commit (ou na mesma sequência em que você faria o commit)
   - Nome do arquivo: `YYYY-MM-DD-<slug-descritivo>.md`
   - Exemplo: `dev-logs/2026-03-28-qa-infrastructure.md`
   - Conteúdo mínimo do log:
@@ -137,7 +146,7 @@ alwaysApply: true
 
     ### Arquivos criados/modificados
     ```
-  - Exiba um resumo do log na tela **antes** de criar o arquivo
+  - Na mensagem ao usuário que encerra a entrega, inclua um **resumo** do log (na mesma resposta em que o arquivo for criado ou atualizado)
 
 ---
 
@@ -145,9 +154,10 @@ alwaysApply: true
 
 - **Quando uma tarefa for fornecida**
   - Obtenha os detalhes com `get_task` via MCP antes de qualquer ação
-  - Marque a tarefa **e** a primeira subtarefa como `in-progress` via `set_task_status` ao iniciar
-  - A cada subtarefa concluída: registre com `update_subtask` e marque como `done` antes de avançar
+  - Ao iniciar: `set_task_status` → `in-progress` na tarefa pai **e** na primeira subtarefa; em seguida `update_subtask` na primeira subtarefa com registro de início (plano / escopo)
+  - A cada subtarefa concluída: `update_subtask` com o que foi feito e `set_task_status` → `done` antes da próxima
   - Marque a tarefa pai como `done` somente após QA passar e commit ser criado
+  - No **mesmo bloco de trabalho** em que a tarefa pai vai a `done`, crie o `dev-logs/` correspondente (referência ao ID/título da tarefa no log) — não delegue a um “próximo turno”
   - Use `update_task` para mudanças de direção que impactem subtarefas pendentes
 
 - **Quando não houver tarefa**
