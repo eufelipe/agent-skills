@@ -8,6 +8,9 @@ dev-debug.log
 # Dependency directories
 node_modules/
 
+# Test coverage
+coverage/
+
 # Environment variables
 .env
 
