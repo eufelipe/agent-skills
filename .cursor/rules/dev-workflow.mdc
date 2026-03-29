@@ -25,6 +25,7 @@ alwaysApply: true
 
 - **Entenda o escopo do trabalho**
   - Se for baseado em uma tarefa Task Master: use o MCP para obter detalhes completos via `get_task`
+  - Marque imediatamente como `in-progress` via `set_task_status` antes de escrever qualquer linha
   - Se não houver tarefa definida: peça esclarecimentos antes de codificar
   - Identifique arquivos afetados e dependências antes de escrever qualquer linha
 
@@ -59,6 +60,31 @@ alwaysApply: true
   - `dev` — pode usar dados locais e logs verbosos
   - `test` — use mocks e dados simulados apenas aqui
   - `prod` — zero dados simulados, logs mínimos
+
+- **Registre progresso no Task Master a cada subtarefa concluída**
+  - Use `update_subtask` para logar o que foi feito, o que funcionou e o que não funcionou
+  - Inclua no log: caminhos de arquivo, trechos de código relevantes, decisões tomadas
+  - Marque a subtarefa como `done` via `set_task_status` antes de passar para a próxima
+  - Nunca avance para a próxima subtarefa sem registrar o progresso da atual
+
+  ```
+  ✅ Ciclo por subtarefa:
+  1. set_task_status → in-progress
+  2. Implementar
+  3. Escrever/rodar testes
+  4. update_subtask → log do que foi feito
+  5. set_task_status → done
+  6. Próxima subtarefa
+  ```
+
+- **Escreva testes junto com o código, não depois**
+  - Crie ou atualize o arquivo de teste correspondente a cada função/módulo novo
+  - Siga a mesma estrutura de pastas: `src/utils/skills.js` → `src/utils/skills.test.js`
+  - Casos obrigatórios por função:
+    - **caminho feliz** — entrada válida, saída esperada
+    - **edge cases** — entrada vazia, nula, malformada
+    - **erros esperados** — exceções documentadas devem ser testadas com `expect(...).toThrow()`
+  - Não comite código novo sem pelo menos um teste cobrindo o comportamento principal
 
 ### 4. Antes de Fazer Commit
 
@@ -119,9 +145,10 @@ alwaysApply: true
 
 - **Quando uma tarefa for fornecida**
   - Obtenha os detalhes com `get_task` via MCP antes de qualquer ação
-  - Atualize o status para `in-progress` ao iniciar: `set_task_status`
-  - Registre progresso com `update_subtask` durante a implementação
-  - Marque como `done` após QA passar e commit ser criado
+  - Marque a tarefa **e** a primeira subtarefa como `in-progress` via `set_task_status` ao iniciar
+  - A cada subtarefa concluída: registre com `update_subtask` e marque como `done` antes de avançar
+  - Marque a tarefa pai como `done` somente após QA passar e commit ser criado
+  - Use `update_task` para mudanças de direção que impactem subtarefas pendentes
 
 - **Quando não houver tarefa**
   - Solicite esclarecimentos se o escopo for ambíguo
