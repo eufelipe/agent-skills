@@ -18,7 +18,7 @@ coverage/
 .idea
 .vscode
 *.suo
-*.ntvs*
+*.ntvs* 
 *.njsproj
 *.sln
 *.sw?
@@ -29,3 +29,5 @@ coverage/
 # Task files
 tasks.json
 tasks/ 
+
+logs/

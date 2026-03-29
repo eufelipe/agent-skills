@@ -1,0 +1,136 @@
+---
+description: Diretrizes obrigatórias a serem seguidas em todas as sessões de desenvolvimento
+globs: **/*
+alwaysApply: true
+---
+
+## Fluxo de Desenvolvimento
+
+### 1. Antes de Começar
+
+- **Crie um feature branch a partir de `main`**
+  - Nunca desenvolva diretamente em `main`
+  - Sempre sincronize com `main` antes de criar o branch:
+    ```bash
+    git checkout main && git pull origin main
+    git checkout -b feat/<slug-descritivo>
+    ```
+  - Use prefixos semânticos: `feat/`, `fix/`, `refactor/`, `chore/`
+  - Exemplos: `feat/add-yaml-parser`, `fix/cli-path-resolution`
+
+- **Verifique a base de código antes de qualquer alteração**
+  - Execute `npm run qa` para garantir que lint, type-check e testes estão passando
+  - Nunca inicie desenvolvimento sobre uma base instável
+  - Se o `qa` falhar, corrija os problemas existentes antes de prosseguir
+
+- **Entenda o escopo do trabalho**
+  - Se for baseado em uma tarefa Task Master: use o MCP para obter detalhes completos via `get_task`
+  - Se não houver tarefa definida: peça esclarecimentos antes de codificar
+  - Identifique arquivos afetados e dependências antes de escrever qualquer linha
+
+### 2. Planejamento com TODO
+
+- **Formule uma lista TODO antes de implementar**
+  - Use a ferramenta `TodoWrite` para registrar todos os passos necessários
+  - Marque cada item como `in_progress` ao iniciar e `completed` ao finalizar
+  - Mantenha apenas **um item** `in_progress` por vez
+  - Atualize a lista conforme descobrir novos sub-passos
+
+  ```
+  ✅ DO: Criar todos antes de implementar
+  [ ] Atualizar schema
+  [ ] Criar função X
+  [ ] Escrever testes
+  [ ] Executar QA
+  [ ] Commit
+
+  ❌ DON'T: Começar a implementar sem planejamento
+  ```
+
+### 3. Durante o Desenvolvimento
+
+- **Mantenha o código limpo e organizado**
+  - Prefira soluções simples — evite over-engineering
+  - Arquivos com mais de 200–300 linhas devem ser refatorados
+  - Funções longas devem ser divididas em partes menores e reutilizáveis
+  - Evite duplicação: verifique se a funcionalidade já existe antes de criar
+
+- **Trate cada ambiente corretamente**
+  - `dev` — pode usar dados locais e logs verbosos
+  - `test` — use mocks e dados simulados apenas aqui
+  - `prod` — zero dados simulados, logs mínimos
+
+### 4. Antes de Fazer Commit
+
+- **Execute o QA completo obrigatoriamente**
+  ```bash
+  npm run qa
+  ```
+  - O comando valida: lint + type-check + testes + cobertura
+  - Nenhum commit deve ser feito com QA falhando
+  - Corrija todos os erros antes de avançar
+
+- **Verifique o diff antes de commitar**
+  - Revise `git diff` para garantir que apenas as mudanças intencionais estão incluídas
+  - Não comite arquivos temporários, `.env`, logs ou artefatos de build
+
+### 5. Commit das Alterações
+
+- **Faça commit após cada desenvolvimento finalizado com sucesso**
+  - Use mensagens descritivas seguindo o padrão [Conventional Commits](https://www.conventionalcommits.org/):
+    ```
+    feat(module): implementa funcionalidade X
+    fix(parser): corrige parsing de yaml inválido
+    refactor(cli): extrai lógica de resolução de paths
+    ```
+  - Inclua no corpo do commit o contexto relevante (tarefa, motivação, trade-offs)
+  - Nunca use `--no-verify` para pular hooks de pre-commit
+
+### 6. Log de Desenvolvimento
+
+- **Crie um log em `dev-logs/` após concluir o desenvolvimento**
+  - Nome do arquivo: `YYYY-MM-DD-<slug-descritivo>.md`
+  - Exemplo: `dev-logs/2026-03-28-qa-infrastructure.md`
+  - Conteúdo mínimo do log:
+    ```markdown
+    # Dev Log — YYYY-MM-DD
+
+    ## Tarefa — <título>
+
+    ### Contexto
+    <Por que essa mudança foi necessária>
+
+    ### O que foi feito
+    - Item 1
+    - Item 2
+
+    ### Decisões técnicas relevantes
+    | Decisão | Motivo |
+    |---|---|
+    | ... | ... |
+
+    ### Arquivos criados/modificados
+    ```
+  - Exiba um resumo do log na tela **antes** de criar o arquivo
+
+---
+
+## Integração com Task Master
+
+- **Quando uma tarefa for fornecida**
+  - Obtenha os detalhes com `get_task` via MCP antes de qualquer ação
+  - Atualize o status para `in-progress` ao iniciar: `set_task_status`
+  - Registre progresso com `update_subtask` durante a implementação
+  - Marque como `done` após QA passar e commit ser criado
+
+- **Quando não houver tarefa**
+  - Solicite esclarecimentos se o escopo for ambíguo
+  - Siga o mesmo fluxo: QA → TODO → Implementar → QA → Commit → Log
+
+---
+
+## Referências
+
+- [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc) — padrão de formatação de regras
+- [dev_workflow.mdc](mdc:.cursor/rules/taskmaster/dev_workflow.mdc) — fluxo completo com Task Master
+- [taskmaster.mdc](mdc:.cursor/rules/taskmaster/taskmaster.mdc) — referência de comandos Task Master
