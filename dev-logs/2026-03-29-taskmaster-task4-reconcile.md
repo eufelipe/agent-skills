@@ -18,3 +18,15 @@ A skill second-brain e o suporte a npx já estavam no repositório; no Task Mast
 ### Arquivos criados/modificados
 - `dev-logs/2026-03-29-taskmaster-task4-reconcile.md` (este arquivo)
 - `.taskmaster/tasks/tasks.json` (atualizado pelo MCP Task Master)
+
+---
+
+## Atualização — PR em aberto (review)
+
+Após abertura do PR, tarefas **4**, **15** e subtarefas **4.1–4.5**, **15.1–15.5** foram movidas para status **`review`** (código em validação; **`done`** reservado para após merge/aprovação).
+
+---
+
+## Regra — `review` / `done` no fluxo com PR
+
+Documentado em [`.cursor/rules/dev-workflow.mdc`](mdc:.cursor/rules/dev-workflow.mdc) (seção **Integração com Task Master**): semântica `in-progress` → `review` (PR aberto) → `done` (pós-merge na `main`); ciclo de subtarefas e gatilho de dev-log alinhados a isso.
