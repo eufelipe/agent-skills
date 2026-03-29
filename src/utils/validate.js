@@ -14,6 +14,11 @@ export function expandPath(pathStr) {
   if (s.startsWith('~/')) {
     return path.join(homedir(), s.slice(2));
   }
+  if (s.startsWith('~')) {
+    throw new Error(
+      'Path inválido: expansão de ~usuário não suportada, use o caminho absoluto'
+    );
+  }
   return path.resolve(s);
 }
 

@@ -1,6 +1,14 @@
 #!/usr/bin/env node
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 import { Command } from 'commander';
 import chalk from 'chalk';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const pkg = JSON.parse(
+  readFileSync(join(__dirname, '../package.json'), 'utf8')
+);
 
 const program = new Command();
 
@@ -9,7 +17,7 @@ program
   .description(
     'CLI para instalar skills padronizadas em ferramentas de agentes'
   )
-  .version('1.0.0');
+  .version(pkg.version);
 
 program
   .command('install <skill>')

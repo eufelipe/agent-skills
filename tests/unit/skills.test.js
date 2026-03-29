@@ -99,20 +99,54 @@ describe('skills', () => {
     }
   });
 
-  it('ignora entradas que não são diretório ou sem skill.yaml', () => {
-    const orphan = path.join(SKILLS_DIR, '_orphan_file');
-    fs.writeFileSync(orphan, 'x', 'utf8');
+  it('validateSkill rejeita targets vazio []', () => {
+    expect(() =>
+      validateSkill({ name: 'x', description: 'd', version: '1', targets: [] })
+    ).toThrow("Skill inválida: campo 'targets' obrigatório");
+  });
+
+  it('getSkill retorna null para nomes com path traversal', () => {
+    expect(getSkill('../etc/passwd')).toBeNull();
+    expect(getSkill('../../.env')).toBeNull();
+    expect(getSkill('a/b')).toBeNull();
+    expect(getSkill('')).toBeNull();
+  });
+
+  it('getSkillTemplate lança para nomes com path traversal', () => {
+    expect(() => getSkillTemplate('../etc/passwd')).toThrow(
+      'Nome de skill inválido'
+    );
+  });
+
+  it('ignora entradas que não são diretório ou sem skill.yaml (via mock)', () => {
+    const fakeEntries = [
+      { name: '_orphan_file', isDirectory: () => false },
+      { name: '_empty_skill_dir', isDirectory: () => true },
+      { name: 'second-brain', isDirectory: () => true },
+    ];
+    const origReaddir = fs.readdirSync.bind(fs);
+    const origExists = fs.existsSync.bind(fs);
+
+    const spyReaddir = vi
+      .spyOn(fs, 'readdirSync')
+      .mockImplementation((p, opts) => {
+        if (path.normalize(String(p)) === path.normalize(SKILLS_DIR)) {
+          return fakeEntries;
+        }
+        return origReaddir(p, opts);
+      });
+    const spyExists = vi.spyOn(fs, 'existsSync').mockImplementation(p => {
+      if (String(p).includes('_empty_skill_dir')) return false;
+      return origExists(p);
+    });
+
     try {
-      const dirNoYaml = path.join(SKILLS_DIR, '_empty_skill_dir');
-      fs.mkdirSync(dirNoYaml, { recursive: true });
       const all = getAllSkills();
       expect(all.every(s => s && typeof s === 'object')).toBe(true);
+      expect(all.find(s => s.name === 'second-brain')).toBeDefined();
     } finally {
-      fs.unlinkSync(orphan);
-      fs.rmSync(path.join(SKILLS_DIR, '_empty_skill_dir'), {
-        recursive: true,
-        force: true,
-      });
+      spyReaddir.mockRestore();
+      spyExists.mockRestore();
     }
   });
 });

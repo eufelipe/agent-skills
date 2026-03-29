@@ -28,8 +28,7 @@
     "format:check": "prettier --check \"src/**/*.js\" \"bin/**/*.js\" \"tests/**/*.js\"",
     "type-check": "tsc --noEmit --project tsconfig.json",
     "pre-commit": "lint-staged",
-    "validate": "npm run lint && npm run type-check && npm run test:coverage",
-    "qa": "npm run validate",
+    "qa": "npm run lint && npm run type-check && npm run test:coverage",
     "prepare": "husky"
   },
   "keywords": [

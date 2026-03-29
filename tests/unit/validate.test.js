@@ -34,6 +34,12 @@ describe('expandPath', () => {
     expect(() => expandPath('   ')).toThrow('Path inválido');
     expect(() => expandPath(null)).toThrow('Path inválido');
   });
+
+  it('rejeita ~usuário (tilde expansion não suportada)', () => {
+    expect(() => expandPath('~outrouser/vault')).toThrow(
+      'expansão de ~usuário não suportada'
+    );
+  });
 });
 
 describe('existsAndIsObsidianVault', () => {

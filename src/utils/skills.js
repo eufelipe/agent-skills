@@ -7,6 +7,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export const SKILLS_DIR = path.join(__dirname, '../skills');
 
+/** @param {unknown} name */
+function isValidSkillName(name) {
+  if (typeof name !== 'string' || name.trim() === '') return false;
+  return !name.includes('/') && !name.includes('\\') && !name.includes('..');
+}
+
 export function getAllSkills() {
   if (!fs.existsSync(SKILLS_DIR)) {
     return [];
@@ -31,6 +37,9 @@ export function getAllSkills() {
 
 /** @param {string} name */
 export function getSkill(name) {
+  if (!isValidSkillName(name)) {
+    return null;
+  }
   const skillPath = path.join(SKILLS_DIR, name, 'skill.yaml');
   if (!fs.existsSync(skillPath)) {
     return null;
@@ -41,6 +50,9 @@ export function getSkill(name) {
 
 /** @param {string} skillName */
 export function getSkillTemplate(skillName) {
+  if (!isValidSkillName(skillName)) {
+    throw new Error(`Nome de skill inválido: '${skillName}'`);
+  }
   const templatePath = path.join(SKILLS_DIR, skillName, 'template.md');
   if (!fs.existsSync(templatePath)) {
     throw new Error(`Template não encontrado para skill '${skillName}'`);
@@ -52,7 +64,8 @@ export function getSkillTemplate(skillName) {
 export function validateSkill(skill) {
   const required = ['name', 'description', 'version', 'targets'];
   for (const field of required) {
-    if (!skill[field]) {
+    const value = skill[field];
+    if (!value || (Array.isArray(value) && value.length === 0)) {
       throw new Error(`Skill inválida: campo '${field}' obrigatório`);
     }
   }
