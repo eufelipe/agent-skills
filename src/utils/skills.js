@@ -8,7 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const SKILLS_DIR = path.join(__dirname, '../skills');
 
 /** @param {unknown} name */
-function isValidSkillName(name) {
+export function isValidSkillName(name) {
   if (typeof name !== 'string' || name.trim() === '') return false;
   return !name.includes('/') && !name.includes('\\') && !name.includes('..');
 }

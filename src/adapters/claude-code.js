@@ -1,6 +1,7 @@
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
+import { isValidSkillName } from '../utils/skills.js';
 
 /**
  * Adapter para Claude Code: instala skills como SKILL.md nativo
@@ -30,6 +31,9 @@ export function describe() {
  * @param {TargetPathOptions} [options]
  */
 export function resolveTargetPath(skillName, options = {}) {
+  if (!isValidSkillName(skillName)) {
+    throw new Error(`Nome de skill inválido: '${skillName}'`);
+  }
   const {
     project = false,
     cwd = process.cwd(),

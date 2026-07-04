@@ -34,6 +34,14 @@ describe('resolveTargetPath', () => {
     );
   });
 
+  it('lança para nomes com path traversal (defesa em profundidade)', () => {
+    for (const bad of ['../../evil', 'a/b', 'a\\b', '', '..']) {
+      expect(() => resolveTargetPath(bad, { homeDir: fakeHome })).toThrow(
+        'Nome de skill inválido'
+      );
+    }
+  });
+
   it('resolve --project em <cwd>/.claude/skills/<skill>/SKILL.md', () => {
     const p = resolveTargetPath('second-brain', {
       project: true,

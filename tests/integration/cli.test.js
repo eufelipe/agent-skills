@@ -85,4 +85,10 @@ describe('CLI (bin/cli.js)', () => {
     expect(r.status).toBe(1);
     expect(r.stderr).toContain('Vault inválido');
   });
+
+  it('doctor com target não suportado falha com exit 1', () => {
+    const r = run(['doctor', '-t', 'vscode']);
+    expect(r.status).toBe(1);
+    expect(r.stderr).toContain("Target 'vscode' não suportado");
+  });
 });

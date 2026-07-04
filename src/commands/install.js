@@ -86,30 +86,43 @@ export async function installCommand(skillName, options = {}) {
     `Instalando skill '${skillName}' para ${target}...`
   ).start();
 
-  const result = await adapter.install({
-    skillName,
-    content,
-    force: Boolean(options.force),
-    project: Boolean(options.project),
-    /** @param {string} filePath */
-    confirm: async filePath => {
-      spinner.stop();
-      if (!isInteractive()) {
-        console.error(
-          chalk.yellow(
-            `Já existe ${filePath}. Use --force para sobrescrever (modo não-interativo).`
-          )
-        );
-        return false;
-      }
-      return confirmOverwrite(filePath);
-    },
-  });
+  // Distingue o skip não-interativo (falta de --force → erro) do
+  // cancelamento deliberado do usuário no prompt (não é erro).
+  let nonInteractiveSkip = false;
+
+  let result;
+  try {
+    result = await adapter.install({
+      skillName,
+      content,
+      force: Boolean(options.force),
+      project: Boolean(options.project),
+      /** @param {string} filePath */
+      confirm: async filePath => {
+        spinner.stop();
+        if (!isInteractive()) {
+          nonInteractiveSkip = true;
+          console.error(
+            chalk.yellow(
+              `Já existe ${filePath}. Use --force para sobrescrever (modo não-interativo).`
+            )
+          );
+          return false;
+        }
+        return confirmOverwrite(filePath);
+      },
+    });
+  } catch (error) {
+    spinner.fail(`Falha ao instalar skill '${skillName}'`);
+    throw error;
+  }
 
   if (!result.installed) {
     spinner.stop();
     console.log(chalk.yellow('✗ Instalação cancelada.'));
-    process.exitCode = 1;
+    if (nonInteractiveSkip) {
+      process.exitCode = 1;
+    }
     return;
   }
 

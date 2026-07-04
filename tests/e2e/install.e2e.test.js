@@ -82,6 +82,13 @@ describe('e2e: install + doctor', () => {
     expect(`${second.stdout}${second.stderr}`).toContain('--force');
   });
 
+  it('doctor com nenhuma skill instalada informa e sai com 0', () => {
+    const doctor = run(['doctor']);
+    expect(doctor.status).toBe(0);
+    expect(doctor.stdout).toContain('não instalada');
+    expect(doctor.stdout).toContain('Nenhuma skill instalada ainda');
+  });
+
   it('doctor falha quando o vault deixa de existir', () => {
     expect(
       run(['install', 'second-brain', '--vault', fakeVault, '--force']).status
