@@ -24,15 +24,13 @@ alwaysApply: true
   - Se o `qa` falhar, corrija os problemas existentes antes de prosseguir
 
 - **Entenda o escopo do trabalho**
-  - Se for baseado em uma tarefa Task Master: use o MCP para obter detalhes completos via `get_task` ou `next_task`
-  - **Antes de qualquer linha de código:** (1) `set_task_status` → `in-progress` na **tarefa pai** e na **primeira subtarefa** ativa; (2) `update_subtask` na **primeira subtarefa** com nota datada: escopo, arquivos previstos e plano curto — isso registra o início do trabalho (o status em si é só via `set_task_status`, não via `update_subtask`)
-  - Se não houver tarefa definida: peça esclarecimentos antes de codificar
+  - Se o escopo for ambíguo: peça esclarecimentos antes de codificar
   - Identifique arquivos afetados e dependências antes de escrever qualquer linha
 
 ### 2. Planejamento com TODO
 
 - **Formule uma lista TODO antes de implementar**
-  - Use a ferramenta `TodoWrite` para registrar todos os passos necessários
+  - Use a ferramenta de todo list para registrar todos os passos necessários
   - Marque cada item como `in_progress` ao iniciar e `completed` ao finalizar
   - Mantenha apenas **um item** `in_progress` por vez
   - Atualize a lista conforme descobrir novos sub-passos
@@ -62,26 +60,8 @@ alwaysApply: true
   - `test` — use mocks e dados simulados apenas aqui
   - `prod` — zero dados simulados, logs mínimos
 
-- **Registre progresso no Task Master a cada subtarefa concluída**
-  - Use `update_subtask` para logar o que foi feito, o que funcionou e o que não funcionou
-  - Inclua no log: caminhos de arquivo, trechos de código relevantes, decisões tomadas
-  - Nunca avance para a próxima subtarefa sem registrar o progresso da atual
-  - O **status** após implementar segue a política de PR (ver **Integração com Task Master**): com PR, use `review` ao abrir o PR e `done` só após merge na `main`
-
-  ```
-  ✅ Ciclo por subtarefa:
-  1. set_task_status → in-progress (subtarefa atual)
-  2. update_subtask → plano ou checkpoint ao iniciar a subtarefa (quando for a primeira do bloco, alinhar com o passo “Antes de Começar”)
-  3. Implementar
-  4. Escrever/rodar testes
-  5. update_subtask → log do que foi feito
-  6. set_task_status → conforme política de PR (ex.: review ao abrir PR; done após merge na main)
-  7. Próxima subtarefa
-  ```
-
 - **Escreva testes junto com o código, não depois**
   - Crie ou atualize o arquivo de teste correspondente a cada função/módulo novo
-  - Siga a mesma estrutura de pastas: `src/utils/skills.js` → `src/utils/skills.test.js`
   - Casos obrigatórios por função:
     - **caminho feliz** — entrada válida, saída esperada
     - **edge cases** — entrada vazia, nula, malformada
@@ -117,11 +97,10 @@ alwaysApply: true
 ### 6. Log de Desenvolvimento
 
 - **Gatilhos — criar `dev-logs/` quando qualquer item abaixo for verdadeiro** (se mais de um, um único arquivo pode cobrir o lote do dia):
-  - Tarefa Task Master marcada como `done` (pai ou conjunto de subtarefas que fecha uma entrega), em geral **após merge** na `main` quando se usa PR
   - Mudança em código de produção (`src/`, `bin/`), contrato público da CLI, ou testes novos/alterados com intenção de commit
   - Decisão arquitetural, refactor multi-arquivo ou mudança de comportamento observável pelo usuário
-- **Não precisa** de arquivo novo: pergunta respondida sem alteração no repo; ajuste mínimo de typo/comentário sem impacto de comportamento; exploração que não alterou arquivos (nesse caso, opcional anotar só no chat ou no Task Master)
-- **Checkpoint antes da mensagem final ao usuário:** se houve alteração versionável relevante ou fechamento de tarefa TM, o turno **não termina** sem `dev-logs/YYYY-MM-DD-<slug>.md` criado/atualizado e um resumo do log no chat. ❌ Não declare “concluído” / “pronto” sem cumprir isso quando um gatilho acima vale.
+- **Não precisa** de arquivo novo: pergunta respondida sem alteração no repo; ajuste mínimo de typo/comentário sem impacto de comportamento; exploração que não alterou arquivos (nesse caso, opcional anotar só no chat)
+- **Checkpoint antes da mensagem final ao usuário:** se houve alteração versionável relevante, o turno **não termina** sem `dev-logs/YYYY-MM-DD-<slug>.md` criado/atualizado e um resumo do log no chat. ❌ Não declare "concluído" / "pronto" sem cumprir isso quando um gatilho acima vale.
 - **Obrigatório quando aplicável:** omitir o arquivo apesar do gatilho é violação do fluxo.
 - **Crie o arquivo em `dev-logs/`** após `npm run qa` passar e antes do commit (ou na mesma sequência em que você faria o commit)
   - Nome do arquivo: `YYYY-MM-DD-<slug-descritivo>.md`
@@ -147,34 +126,3 @@ alwaysApply: true
     ### Arquivos criados/modificados
     ```
   - Na mensagem ao usuário que encerra a entrega, inclua um **resumo** do log (na mesma resposta em que o arquivo for criado ou atualizado)
-
----
-
-## Integração com Task Master
-
-- **Semântica de status (recomendado com pull request)**
-  - **`in-progress`** — desenvolvimento ativo no branch
-  - **`review`** — PR aberto cobrindo a tarefa/subtarefa: código no branch, aguardando revisão, CI ou merge
-  - **`done`** — alterações já integradas na **`main`** (ou branch de release acordado), com critério de aceite fechado
-  - **Ao abrir o PR** que engloba o trabalho: `set_task_status` → **`review`** na **tarefa pai** e nas **subtarefas** incluídas nesse PR (evita marcar `done` antes do merge e mantém `next_task` / relatórios coerentes)
-  - **Após merge na `main`:** `set_task_status` → **`done`** nessas mesmas tarefas e subtarefas (rodar `npm run qa` na base atualizada se fizer sentido)
-
-- **Quando uma tarefa for fornecida**
-  - Obtenha os detalhes com `get_task` via MCP antes de qualquer ação
-  - Ao iniciar: `set_task_status` → `in-progress` na tarefa pai **e** na primeira subtarefa; em seguida `update_subtask` na primeira subtarefa com registro de início (plano / escopo)
-  - A cada subtarefa concluída no branch: `update_subtask` com o que foi feito; atualize o status conforme a política acima (`review` com PR aberto, `done` só após merge)
-  - Com fluxo via PR: a tarefa pai **não** vai a `done` só porque houve commit — vai a **`review`** com o PR e a **`done`** após merge
-  - No **mesmo bloco de trabalho** em que a tarefa pai vai a **`done`** (pós-merge), crie ou atualize o `dev-logs/` correspondente (referência ao ID/título da tarefa no log) — não delegue a um “próximo turno”
-  - Use `update_task` para mudanças de direção que impactem subtarefas pendentes
-
-- **Quando não houver tarefa**
-  - Solicite esclarecimentos se o escopo for ambíguo
-  - Siga o mesmo fluxo: QA → TODO → Implementar → QA → Commit → Log
-
----
-
-## Referências
-
-- [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc) — padrão de formatação de regras
-- [dev_workflow.mdc](mdc:.cursor/rules/taskmaster/dev_workflow.mdc) — fluxo completo com Task Master
-- [taskmaster.mdc](mdc:.cursor/rules/taskmaster/taskmaster.mdc) — referência de comandos Task Master

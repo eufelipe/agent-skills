@@ -5,4 +5,3 @@ coverage
 *.md
 package-lock.json
 .git
-.taskmaster

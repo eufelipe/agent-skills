@@ -31,3 +31,6 @@ tasks.json
 tasks/ 
 
 logs/
+
+# Claude Code — config local por máquina, nunca versionar
+.claude/settings.local.json
