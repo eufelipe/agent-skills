@@ -3,12 +3,16 @@ created_at: 2026-03-28
 created_by: atlas
 type: reference
 domain: produto
-status: active
+status: deprecated
 project: "[[eufelipe-agent-skills]]"
 subject: [prd, cli, agent-skills]
 ---
 
 # PRD: eufelipe-agent-skills (MVP)
+
+> **⚠️ Documento histórico (2026-03).** O MVP entregue divergiu deste PRD em pontos importantes:
+> a skill foi renomeada de `second-brain` para **`atlas-brain`**; o target claude-code gera **SKILL.md nativo** em `~/.claude/skills/` (não CLAUDE.md); o acesso ao vault é **filesystem direto** (sem MCP/Local REST API no MVP); e o target cursor ficou para a v1.1.
+> Fonte atual da verdade: [README.md](../README.md).
 
 ## Visão Geral
 
