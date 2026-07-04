@@ -22,11 +22,13 @@ program
 program
   .command('install <skill>')
   .description('Instala uma skill em um target específico')
-  .option('-t, --target <target>', 'Target (cursor, claude-code)')
+  .option('-t, --target <target>', 'Target (claude-code)')
   .option('-v, --vault <path>', 'Caminho do vault Obsidian')
-  .option('-k, --api-key <key>', 'API Key do plugin Local REST API')
-  .option('--with-mcp', 'Configurar MCP junto com a skill')
-  .option('--global', 'Instalar globalmente (apenas claude-code)')
+  .option(
+    '--project',
+    'Instala no projeto atual (.claude/skills/) em vez de global'
+  )
+  .option('--force', 'Sobrescreve arquivos existentes sem confirmar')
   .action(_skill => {
     console.log(chalk.yellow('Comando install em desenvolvimento...'));
   });
