@@ -1,6 +1,6 @@
 {
   "name": "@eufelipe/agent-skills",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "CLI para instalar skills padronizadas em ferramentas de agentes de IA",
   "type": "module",
   "bin": {
@@ -28,7 +28,8 @@
     "type-check": "tsc --noEmit --project tsconfig.json",
     "pre-commit": "lint-staged",
     "qa": "npm run lint && npm run type-check && npm run test:coverage",
-    "prepare": "husky"
+    "prepare": "husky",
+    "prepublishOnly": "npm run qa"
   },
   "keywords": [
     "cli",
@@ -81,5 +82,8 @@
     "*.{json,md}": [
       "prettier --write"
     ]
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
