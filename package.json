@@ -1,6 +1,6 @@
 {
   "name": "@eufelipe/agent-skills",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "CLI para instalar skills padronizadas em ferramentas de agentes de IA",
   "type": "module",
   "bin": {

@@ -131,7 +131,9 @@ export async function installCommand(skillName, options = {}) {
   console.log(`${chalk.green('✓')} Vault configurado: ${vaultPath}`);
   console.log(chalk.bold('\n🎉 Setup completo!\n'));
   console.log('Próximos passos:');
-  console.log('  1. Abra o Claude Code em qualquer projeto e use /atlas-brain');
+  console.log(
+    `  1. Abra o Claude Code em qualquer projeto e use /${skillName}`
+  );
   console.log('     ou peça: "Salva no segundo cérebro: [conteúdo]"');
   console.log(
     `  2. Rode ${chalk.cyan('npx @eufelipe/agent-skills doctor')} para verificar o setup`
