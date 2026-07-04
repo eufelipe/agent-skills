@@ -37,24 +37,24 @@ describe('skills', () => {
     const all = getAllSkills();
     expect(Array.isArray(all)).toBe(true);
     expect(all.length).toBeGreaterThan(0);
-    const second = all.find(s => s?.name === 'second-brain');
+    const second = all.find(s => s?.name === 'atlas-brain');
     expect(second).toBeDefined();
     expect(second.description).toBeTruthy();
     expect(second.version).toBe('1.0.0');
     expect(second.targets).toEqual(['claude-code']);
   });
 
-  it('getSkill carrega second-brain e getSkill inexistente retorna null', () => {
-    const skill = getSkill('second-brain');
+  it('getSkill carrega atlas-brain e getSkill inexistente retorna null', () => {
+    const skill = getSkill('atlas-brain');
     expect(skill).not.toBeNull();
-    expect(skill.name).toBe('second-brain');
+    expect(skill.name).toBe('atlas-brain');
     expect(getSkill('nao-existe')).toBeNull();
   });
 
   it('getSkillTemplate retorna conteúdo e lança se template ausente', () => {
-    const body = getSkillTemplate('second-brain');
+    const body = getSkillTemplate('atlas-brain');
     expect(typeof body).toBe('string');
-    expect(body).toMatch(/^---\nname: second-brain\n/);
+    expect(body).toMatch(/^---\nname: atlas-brain\n/);
     expect(body).toContain('description:');
     expect(body).toContain('{{vault_path}}');
     expect(body).toContain('{{agent}}');
@@ -66,10 +66,10 @@ describe('skills', () => {
     );
   });
 
-  it('second-brain skill.yaml segue o schema de metadata e files', () => {
-    const skill = getSkill('second-brain');
+  it('atlas-brain skill.yaml segue o schema de metadata e files', () => {
+    const skill = getSkill('atlas-brain');
     expect(skill).not.toBeNull();
-    expect(skill.name).toBe('second-brain');
+    expect(skill.name).toBe('atlas-brain');
     expect(skill.author).toBe('eufelipe');
     expect(skill.config?.vault_path).toMatchObject({
       type: 'string',
@@ -79,7 +79,7 @@ describe('skills', () => {
     expect(skill.files?.[0]).toMatchObject({
       template: 'template.md',
       targets: {
-        'claude-code': '~/.claude/skills/second-brain/SKILL.md',
+        'claude-code': '~/.claude/skills/atlas-brain/SKILL.md',
       },
       mode: 'replace-with-confirm',
     });
@@ -126,7 +126,7 @@ describe('skills', () => {
     const fakeEntries = [
       { name: '_orphan_file', isDirectory: () => false },
       { name: '_empty_skill_dir', isDirectory: () => true },
-      { name: 'second-brain', isDirectory: () => true },
+      { name: 'atlas-brain', isDirectory: () => true },
     ];
     const origReaddir = fs.readdirSync.bind(fs);
     const origExists = fs.existsSync.bind(fs);
@@ -147,7 +147,7 @@ describe('skills', () => {
     try {
       const all = getAllSkills();
       expect(all.every(s => s && typeof s === 'object')).toBe(true);
-      expect(all.find(s => s.name === 'second-brain')).toBeDefined();
+      expect(all.find(s => s.name === 'atlas-brain')).toBeDefined();
     } finally {
       spyReaddir.mockRestore();
       spyExists.mockRestore();

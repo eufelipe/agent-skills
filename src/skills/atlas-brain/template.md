@@ -1,12 +1,12 @@
 ---
-name: second-brain
+name: atlas-brain
 description: Salva notas no segundo cérebro (vault Obsidian) do usuário. Use quando o usuário pedir "salvar no segundo cérebro", "save to second brain", "anota no vault", "guarda isso no vault", "registra essa decisão/aprendizado/bug/lição", ou quando ao final de uma sessão de trabalho pedir para registrar o que foi aprendido ou decidido.
 ---
 
 <!-- vault_path: {{vault_path}} -->
 <!-- installed_by: @eufelipe/agent-skills ({{skill_name}}) em {{date}} para {{agent}} -->
 
-# Second Brain — Salvar notas no vault Obsidian
+# Atlas Brain — Salvar notas no segundo cérebro (vault Obsidian)
 
 O vault do usuário fica em: `{{vault_path}}`
 

@@ -39,17 +39,17 @@ describe('CLI (bin/cli.js)', () => {
     expect(r.stdout.trim()).toBe(pkg.version);
   });
 
-  it('list mostra a skill second-brain', () => {
+  it('list mostra a skill atlas-brain', () => {
     const r = run(['list']);
     expect(r.status).toBe(0);
-    expect(r.stdout).toContain('second-brain');
+    expect(r.stdout).toContain('atlas-brain');
     expect(r.stdout).toContain('claude-code');
   });
 
-  it('info second-brain mostra metadata', () => {
-    const r = run(['info', 'second-brain']);
+  it('info atlas-brain mostra metadata', () => {
+    const r = run(['info', 'atlas-brain']);
     expect(r.status).toBe(0);
-    expect(r.stdout).toContain('second-brain');
+    expect(r.stdout).toContain('atlas-brain');
     expect(r.stdout).toContain('Targets suportados: claude-code');
     expect(r.stdout).toContain('vault_path (obrigatório)');
   });
@@ -64,24 +64,24 @@ describe('CLI (bin/cli.js)', () => {
     const r = run(['install', 'nao-existe']);
     expect(r.status).toBe(1);
     expect(r.stderr).toContain("Skill 'nao-existe' não encontrada");
-    expect(r.stderr).toContain('second-brain');
+    expect(r.stderr).toContain('atlas-brain');
   });
 
   it('install com target não suportado falha com exit 1', () => {
-    const r = run(['install', 'second-brain', '-t', 'vscode']);
+    const r = run(['install', 'atlas-brain', '-t', 'vscode']);
     expect(r.status).toBe(1);
     expect(r.stderr).toContain("Target 'vscode' não suportado");
     expect(r.stderr).toContain('claude-code');
   });
 
   it('install sem --vault em modo não-interativo falha pedindo a flag', () => {
-    const r = run(['install', 'second-brain']);
+    const r = run(['install', 'atlas-brain']);
     expect(r.status).toBe(1);
     expect(r.stderr).toContain('--vault');
   });
 
   it('install com vault inválido falha com exit 1', () => {
-    const r = run(['install', 'second-brain', '--vault', '/nao/existe/vault']);
+    const r = run(['install', 'atlas-brain', '--vault', '/nao/existe/vault']);
     expect(r.status).toBe(1);
     expect(r.stderr).toContain('Vault inválido');
   });

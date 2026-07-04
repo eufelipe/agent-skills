@@ -1,4 +1,4 @@
-name: second-brain
+name: atlas-brain
 description: Salva notas no segundo cérebro (vault Obsidian) seguindo as convenções do vault
 version: 1.0.0
 author: eufelipe
@@ -16,5 +16,5 @@ config:
 files:
   - template: template.md
     targets:
-      claude-code: '~/.claude/skills/second-brain/SKILL.md'
+      claude-code: '~/.claude/skills/atlas-brain/SKILL.md'
     mode: replace-with-confirm

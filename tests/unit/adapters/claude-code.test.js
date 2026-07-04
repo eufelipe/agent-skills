@@ -28,9 +28,9 @@ afterEach(() => {
 
 describe('resolveTargetPath', () => {
   it('resolve global em <home>/.claude/skills/<skill>/SKILL.md', () => {
-    const p = resolveTargetPath('second-brain', { homeDir: fakeHome });
+    const p = resolveTargetPath('atlas-brain', { homeDir: fakeHome });
     expect(p).toBe(
-      path.join(fakeHome, '.claude', 'skills', 'second-brain', 'SKILL.md')
+      path.join(fakeHome, '.claude', 'skills', 'atlas-brain', 'SKILL.md')
     );
   });
 
@@ -43,7 +43,7 @@ describe('resolveTargetPath', () => {
   });
 
   it('resolve --project em <cwd>/.claude/skills/<skill>/SKILL.md', () => {
-    const p = resolveTargetPath('second-brain', {
+    const p = resolveTargetPath('atlas-brain', {
       project: true,
       cwd: '/tmp/meu-projeto',
     });
@@ -52,7 +52,7 @@ describe('resolveTargetPath', () => {
         '/tmp/meu-projeto',
         '.claude',
         'skills',
-        'second-brain',
+        'atlas-brain',
         'SKILL.md'
       )
     );
@@ -62,7 +62,7 @@ describe('resolveTargetPath', () => {
 describe('install', () => {
   it('cria diretórios e escreve o SKILL.md', async () => {
     const result = await install({
-      skillName: 'second-brain',
+      skillName: 'atlas-brain',
       content: '# conteúdo',
       homeDir: fakeHome,
     });
