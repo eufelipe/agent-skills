@@ -39,10 +39,10 @@ afterEach(() => {
 });
 
 describe('e2e: install + doctor', () => {
-  it('instala second-brain global e o doctor valida o setup', () => {
+  it('instala atlas-brain global e o doctor valida o setup', () => {
     const install = run([
       'install',
-      'second-brain',
+      'atlas-brain',
       '--vault',
       fakeVault,
       '--force',
@@ -54,13 +54,13 @@ describe('e2e: install + doctor', () => {
       fakeHome,
       '.claude',
       'skills',
-      'second-brain',
+      'atlas-brain',
       'SKILL.md'
     );
     expect(fs.existsSync(skillPath)).toBe(true);
 
     const content = fs.readFileSync(skillPath, 'utf8');
-    expect(content).toMatch(/^---\nname: second-brain\n/);
+    expect(content).toMatch(/^---\nname: atlas-brain\n/);
     expect(content).toContain(`<!-- vault_path: ${fakeVault} -->`);
     expect(content).toContain(`${fakeVault}/inbox/`);
     expect(content).toContain('created_by: claude-code');
@@ -68,16 +68,16 @@ describe('e2e: install + doctor', () => {
 
     const doctor = run(['doctor']);
     expect(doctor.status).toBe(0);
-    expect(doctor.stdout).toContain('second-brain: instalada');
+    expect(doctor.stdout).toContain('atlas-brain: instalada');
     expect(doctor.stdout).toContain(fakeVault);
   });
 
   it('reinstalação sem --force em modo não-interativo não sobrescreve', () => {
     expect(
-      run(['install', 'second-brain', '--vault', fakeVault, '--force']).status
+      run(['install', 'atlas-brain', '--vault', fakeVault, '--force']).status
     ).toBe(0);
 
-    const second = run(['install', 'second-brain', '--vault', fakeVault]);
+    const second = run(['install', 'atlas-brain', '--vault', fakeVault]);
     expect(second.status).toBe(1);
     expect(`${second.stdout}${second.stderr}`).toContain('--force');
   });
@@ -91,7 +91,7 @@ describe('e2e: install + doctor', () => {
 
   it('doctor falha quando o vault deixa de existir', () => {
     expect(
-      run(['install', 'second-brain', '--vault', fakeVault, '--force']).status
+      run(['install', 'atlas-brain', '--vault', fakeVault, '--force']).status
     ).toBe(0);
 
     fs.rmSync(fakeVault, { recursive: true, force: true });
@@ -111,7 +111,7 @@ describe('e2e: install + doctor', () => {
         [
           cli,
           'install',
-          'second-brain',
+          'atlas-brain',
           '--vault',
           fakeVault,
           '--force',
@@ -126,7 +126,7 @@ describe('e2e: install + doctor', () => {
       expect(r.status).toBe(0);
       expect(
         fs.existsSync(
-          join(fakeProject, '.claude', 'skills', 'second-brain', 'SKILL.md')
+          join(fakeProject, '.claude', 'skills', 'atlas-brain', 'SKILL.md')
         )
       ).toBe(true);
     } finally {

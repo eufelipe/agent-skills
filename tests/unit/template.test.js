@@ -31,13 +31,13 @@ describe('buildTemplateVars', () => {
     const vars = buildTemplateVars({
       vaultPath: '/tmp/vault',
       agent: 'claude-code',
-      skillName: 'second-brain',
+      skillName: 'atlas-brain',
       now: new Date('2026-07-04T15:30:00Z'),
     });
     expect(vars).toEqual({
       vault_path: '/tmp/vault',
       agent: 'claude-code',
-      skill_name: 'second-brain',
+      skill_name: 'atlas-brain',
       date: '2026-07-04',
     });
   });
@@ -46,7 +46,7 @@ describe('buildTemplateVars', () => {
     const vars = buildTemplateVars({
       vaultPath: '/tmp/vault',
       agent: 'claude-code',
-      skillName: 'second-brain',
+      skillName: 'atlas-brain',
     });
     expect(vars.date).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });

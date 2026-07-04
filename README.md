@@ -4,20 +4,20 @@ CLI para instalar skills padronizadas em ferramentas de agentes de IA.
 
 > **"Instale uma vez, use em qualquer agente."**
 
-A primeira skill é a **second-brain**: ela ensina o agente (Claude Code) a salvar notas no seu vault Obsidian seguindo as convenções do vault — transformando o vault em uma fonte de verdade que pode ser consumida por outras estruturas (Atlas, OpenClaw, Hermes, etc.).
+A primeira skill é a **atlas-brain**: ela ensina o agente (Claude Code) a salvar notas no seu vault Obsidian seguindo as convenções do vault — transformando o vault em uma fonte de verdade que pode ser consumida por outras estruturas (Atlas, OpenClaw, Hermes, etc.).
 
 ## Quickstart
 
 ```bash
-npx @eufelipe/agent-skills install second-brain
+npx @eufelipe/agent-skills install atlas-brain
 ```
 
-O wizard pergunta o caminho do seu vault Obsidian, valida (precisa de `.obsidian/` ou `CONVENTIONS.md`) e instala a skill em `~/.claude/skills/second-brain/SKILL.md`.
+O wizard pergunta o caminho do seu vault Obsidian, valida (precisa de `.obsidian/` ou `CONVENTIONS.md`) e instala a skill em `~/.claude/skills/atlas-brain/SKILL.md`.
 
 Depois, em **qualquer projeto** com Claude Code:
 
 ```
-/second-brain
+/atlas-brain
 ```
 
 ou simplesmente peça: _"Salva no segundo cérebro: [conteúdo]"_ — o agente cria uma nota bem-formada em `inbox/` do vault, com frontmatter (`created_by`, `created_at`, `type`, `domain`) e naming kebab-case.
@@ -43,7 +43,7 @@ ou simplesmente peça: _"Salva no segundo cérebro: [conteúdo]"_ — o agente c
 Exemplo não-interativo:
 
 ```bash
-npx @eufelipe/agent-skills install second-brain --vault "~/Documents/Obsidian Vault" --force
+npx @eufelipe/agent-skills install atlas-brain --vault "~/Documents/Obsidian Vault" --force
 ```
 
 ## Como funciona
@@ -69,7 +69,7 @@ npm run cli -- list
 
 ## Roadmap
 
-- **v0.1** — skill `second-brain` para Claude Code (SKILL.md nativo) ✅
+- **v0.1** — skill `atlas-brain` para Claude Code (SKILL.md nativo) ✅
 - **v1.1** — target `cursor` (`.cursor/rules/*.mdc`) via registry de adapters
 - **v2** — mais skills (github-flow, etc.), update automático de skills instaladas
 
