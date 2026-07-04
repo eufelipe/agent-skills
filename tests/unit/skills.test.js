@@ -41,7 +41,7 @@ describe('skills', () => {
     expect(second).toBeDefined();
     expect(second.description).toBeTruthy();
     expect(second.version).toBe('1.0.0');
-    expect(second.targets).toEqual(['cursor', 'claude-code']);
+    expect(second.targets).toEqual(['claude-code']);
   });
 
   it('getSkill carrega second-brain e getSkill inexistente retorna null', () => {
@@ -54,16 +54,19 @@ describe('skills', () => {
   it('getSkillTemplate retorna conteúdo e lança se template ausente', () => {
     const body = getSkillTemplate('second-brain');
     expect(typeof body).toBe('string');
-    expect(body).toContain('Second Brain — Instruções para Agentes');
+    expect(body).toMatch(/^---\nname: second-brain\n/);
+    expect(body).toContain('description:');
     expect(body).toContain('{{vault_path}}');
     expect(body).toContain('{{agent}}');
     expect(body).toContain('{{date}}');
+    expect(body).toContain('{{skill_name}}');
+    expect(body).toContain('<!-- vault_path: {{vault_path}} -->');
     expect(() => getSkillTemplate('skill-inexistente')).toThrow(
       "Template não encontrado para skill 'skill-inexistente'"
     );
   });
 
-  it('second-brain skill.yaml segue metadata e files do PRD', () => {
+  it('second-brain skill.yaml segue o schema de metadata e files', () => {
     const skill = getSkill('second-brain');
     expect(skill).not.toBeNull();
     expect(skill.name).toBe('second-brain');
@@ -75,9 +78,10 @@ describe('skills', () => {
     });
     expect(skill.files?.[0]).toMatchObject({
       template: 'template.md',
-      target_cursor: '.cursor/rules/second-brain.mdc',
-      target_claude: 'CLAUDE.md',
-      mode: 'append',
+      targets: {
+        'claude-code': '~/.claude/skills/second-brain/SKILL.md',
+      },
+      mode: 'replace-with-confirm',
     });
   });
 
