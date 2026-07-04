@@ -1,0 +1,29 @@
+name: Claude Code Review
+
+on:
+  issue_comment:
+    types: [created]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  claude:
+    if: contains(github.event.comment.body, '@claude')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Claude Code Action
+        uses: anthropics/claude-code-action@v1.0.157
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          # Critérios de review deste repo — manter em sync com .cursor/rules/dev-workflow.mdc.
+          claude_args: |
+            --append-system-prompt "Em review de PR neste repo, siga .cursor/rules/dev-workflow.mdc. Gate de qualidade: 'npm run qa' (eslint + tsc strict com checkJs + vitest) precisa passar. Exija: (1) testes junto com código novo — unit para utils/adapters, integration/e2e via spawn para comandos da CLI; (2) JSDoc types no padrão do projeto (sem instalar @types externos — usar src/types/vendor.d.ts); (3) output da CLI em pt-BR com chalk, erros via process.exitCode = 1 (nunca process.exit); (4) zero dependências novas sem justificativa explícita no PR. Rigor de qualidade (duplicação, função grande, nested-if achatável, comentário que envelhece mal) aplica-se apenas ao código novo/modificado no diff, não a smell pré-existente. Não aprove com finding de qualidade aberto."
